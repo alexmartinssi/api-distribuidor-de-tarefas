@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Log {
+public class Register {
 	
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -28,5 +28,7 @@ public class Log {
 	private String period;
 	@NotEmpty
 	private String status;
+	@NotEmpty
+	private String reward;
 
 }
