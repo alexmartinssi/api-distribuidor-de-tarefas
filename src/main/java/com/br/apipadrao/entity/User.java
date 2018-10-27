@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
 
@@ -46,8 +45,7 @@ public class User implements UserDetails{
 	@NotEmpty
 	private boolean active;
 	
-	@OneToMany(targetEntity=Task.class, fetch=FetchType.EAGER)
-    @JoinColumn(name="user_id")
+	@OneToMany(mappedBy = "user", fetch=FetchType.EAGER)
     private List<Task> tasks;
 	
 	@Override

@@ -3,6 +3,8 @@ package com.br.apipadrao.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.Id;
@@ -24,5 +26,8 @@ public class Task {
 	private String name;
 	@NotEmpty
 	private String description;
+	@ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
