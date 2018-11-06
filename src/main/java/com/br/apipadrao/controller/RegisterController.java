@@ -1,10 +1,14 @@
 package com.br.apipadrao.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,42 +21,59 @@ import com.br.apipadrao.entity.Register;
 import com.br.apipadrao.service.RegisterService;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/api/registers")
 public class RegisterController {
 
 	@Autowired
 	private RegisterService registerService;
 	
-	@PostMapping("/v1/register/create")
-	public BodyBuilder create(@RequestBody RegisterDTO registerDTO) {
-		Register checkRegister = registerService.create(registerDTO);
-		if(checkRegister == null) {
-			return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+	@GetMapping("/v1/list/")
+	public ResponseEntity<List<Register>> list(){
+		List<Register> registers = registerService.list();
+		if(registers.isEmpty()) {
+			return new ResponseEntity<List<Register>>(HttpStatus.NO_CONTENT);
 		}
-		return ResponseEntity.status(HttpStatus.CREATED);
+		return new ResponseEntity<List<Register>>(registers, HttpStatus.OK);
 	}
 	
-	@PutMapping("/v1/register/update")
-	public BodyBuilder update(@RequestBody RegisterDTO registerDTO) {
-		Register checkRegister;
+	@GetMapping("/v1/register/{id}")
+    public ResponseEntity<?> get(@PathVariable("id") long id) {
+        Register register = registerService.findById(id);
+        if (register == null) {
+            return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Register>(register, HttpStatus.OK);
+    }
+	
+	@PostMapping("/v1/create/")
+	public ResponseEntity<?> create(@Valid @RequestBody RegisterDTO registerDTO) {
+		Register register = registerService.create(registerDTO);
+		if(register == null) {
+			return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Register>(register, HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/v1/update/")
+	public ResponseEntity<?> update(@Valid @RequestBody RegisterDTO registerDTO) {
 		try {
-			checkRegister = registerService.update(registerDTO);
-			if(checkRegister == null) {
-				return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			Register register = registerService.update(registerDTO);
+			if(register == null) {
+				return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
 			}
-			return ResponseEntity.status(HttpStatus.OK);	
+			return new ResponseEntity<Register>(register, HttpStatus.OK);	
 		} catch (Exception e) {
-			return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Register>(HttpStatus.CONFLICT);
 		}
 	}
 	
-	@DeleteMapping("/v1/register/{id}")
-	public BodyBuilder remove(@PathVariable Long id) {
+	@DeleteMapping("/v1/remove/{id}")
+	public ResponseEntity<?> remove(@PathVariable Long id) {
 		try {
 			registerService.remove(id);
-			return ResponseEntity.status(HttpStatus.OK);
+			return new ResponseEntity<Register>(HttpStatus.OK);
 		} catch (Exception e) {
-			return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Register>(HttpStatus.CONFLICT);
 		}
 	}
 }

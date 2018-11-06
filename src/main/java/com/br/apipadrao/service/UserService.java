@@ -1,26 +1,38 @@
 package com.br.apipadrao.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 import com.br.apipadrao.dto.UserDTO;
 import com.br.apipadrao.entity.User;
 import com.br.apipadrao.repository.UserRepository;
 
-public class UserService implements UserDetailsService {
+@Service
+public class UserService {
 	
 	@Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	public List<User> list(){
+		return userRepository.findAll();
+	}
+	
+	public User findById(long id) {
+		return userRepository.getOne(id);
+	}
+	
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+	
+//	public User create(UserDTO userDTO) {
+//		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
+//        return userRepository.save(userDTO.getUser());
+//    }
 	
 	public User create(UserDTO userDTO) {
-		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		userDTO.getUser().setPassword(userDTO.getPassword());
         return userRepository.save(userDTO.getUser());
     }
 	
@@ -33,10 +45,10 @@ public class UserService implements UserDetailsService {
 		User oldUser = userRepository.getOne(newUser.getId());
 
 		newUser.setPassword(oldUser.getPassword());
-		if (!StringUtils.isEmpty(userDTO.getPassword())) {
-			String hash = passwordEncoder.encode(userDTO.getPassword());
-			newUser.setPassword(hash);
-		}
+//		if (!StringUtils.isEmpty(userDTO.getPassword())) {
+//			String hash = passwordEncoder.encode(userDTO.getPassword());
+//			newUser.setPassword(hash);
+//		}
 		return newUser;
 	}
 	
@@ -46,8 +58,13 @@ public class UserService implements UserDetailsService {
 		return userRepository.save(user);
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return null;
-	}
+//	@Override
+//	@Transactional(readOnly = true)
+//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		User details = userRepository.findUserByUsername(username);
+//		if (details == null) {
+//			throw new UsernameNotFoundException("Username not found on database.");
+//		}
+//		return details;
+//	}
 }

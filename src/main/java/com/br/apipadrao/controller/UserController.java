@@ -1,14 +1,19 @@
 package com.br.apipadrao.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.apipadrao.dto.UserDTO;
@@ -16,45 +21,62 @@ import com.br.apipadrao.entity.User;
 import com.br.apipadrao.service.UserService;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@GetMapping("/v1/list/")
+	public ResponseEntity<List<User>> list(){
+		List<User> users = userService.list();
+		if(users.isEmpty()) {
+			return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+	}
+	
+	@GetMapping("/v1/user/{id}")
+    public ResponseEntity<?> get(@PathVariable("id") long id) {
+        User user = userService.findById(id);
+        if (user == null) {
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
 
-	@PostMapping("/v1/user/create")
-	public BodyBuilder create(@RequestBody UserDTO userDTO) {
-		User checkUser = userService.create(userDTO);
-		if(checkUser == null) {
-			return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+	@PostMapping("/v1/create/")
+	public ResponseEntity<?> create(@Valid @RequestBody UserDTO userDTO) {
+		User user = userService.create(userDTO);
+		if(user == null) {
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
-		return ResponseEntity.status(HttpStatus.CREATED);
+		return new ResponseEntity<User>(user, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/v1/user/update")
-	public BodyBuilder update(@RequestBody UserDTO userDTO) {
-		User checkUser;
+	@PutMapping("/v1/update/")
+	public ResponseEntity<?> update(@Valid @RequestBody UserDTO userDTO) {
 		try {
-			checkUser = userService.update(userDTO);
-			if(checkUser == null) {
-				return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			User user = userService.update(userDTO);
+			if(user == null) {
+				return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 			}
-			return ResponseEntity.status(HttpStatus.OK);	
+			return new ResponseEntity<User>(user, HttpStatus.OK);	
 		} catch (Exception e) {
-			return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(HttpStatus.CONFLICT);
 		}
 	}
 	
-	@DeleteMapping("/v1/user/{id}")
-	public BodyBuilder remove(@PathVariable Long id) {
-		User checkUser;
+	@DeleteMapping("/v1/remove/{id}")
+	public ResponseEntity<?> remove(@PathVariable Long id) {
 		try {
-			checkUser = userService.remove(id);
-			if(checkUser == null) {
-				return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			User user = userService.remove(id);
+			if(user == null) {
+				return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 			}
-			return ResponseEntity.status(HttpStatus.OK);
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		} catch (Exception e) {
-			return  ResponseEntity.status(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(HttpStatus.CONFLICT);
 		}
 	}
 }

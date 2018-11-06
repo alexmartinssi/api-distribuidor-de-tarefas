@@ -2,74 +2,57 @@ package com.br.apipadrao.entity;
 
 
 
-import java.util.Collection;
-import java.util.List;
+import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.OneToMany;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.scheduling.config.Task;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Component
+@Table(name = "api_user", //
+	   uniqueConstraints = { //
+		@UniqueConstraint(columnNames = {"username"}), //
+		@UniqueConstraint(columnNames = {"email"}) //
+	  }) //
 @NoArgsConstructor
 @Getter
 @Setter
-public class User implements UserDetails{
+public class User  implements Serializable{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@NotEmpty
+	@Column(nullable = false, length = 100)
 	private String name;
 	@NotEmpty
+	@Column(nullable = false, length = 50)
 	private String email;
 	@NotEmpty
+	@Column(unique = true, nullable = false, length = 50)
 	private String username;
 	@NotEmpty
+	@Column(nullable = false, length = 50)
 	private String password;
-	@NotEmpty
+	@Column(nullable = false, length = 10)
 	private boolean active;
-	
-	@OneToMany(mappedBy = "user", fetch=FetchType.EAGER)
-    private List<Task> tasks;
-	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
-	}
-	@Override
-	public String getUsername() {
-		return username;
-	}
-	@Override
-	public boolean isAccountNonExpired() {
-		return false;
-	}
-	@Override
-	public boolean isAccountNonLocked() {
-		return false;
-	}
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return false;
-	}
-	@Override
-	public boolean isEnabled() {
-		return active;
-	}
 }
