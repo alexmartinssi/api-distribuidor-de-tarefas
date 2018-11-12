@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import com.br.apipadrao.dto.UserDTO;
 import com.br.apipadrao.entity.User;
+import com.br.apipadrao.enums.Perfil;
 import com.br.apipadrao.repository.UserRepository;
 
 @Service
@@ -33,6 +34,7 @@ public class UserService implements UserDetailsService {
 
 	public User create(UserDTO userDTO) {
 		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		userDTO.getUser().addPerfil(Perfil.USUARIO);
         return userRepository.save(userDTO.getUser());
     }
 
