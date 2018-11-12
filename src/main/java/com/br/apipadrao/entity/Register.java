@@ -35,6 +35,9 @@ public class Register implements Serializable{
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@NotEmpty
+	@Column(nullable = false, length = 100)
+	private String name;
+	@NotEmpty
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date initialDate;
 	@NotEmpty

@@ -37,7 +37,7 @@ public class Task implements Serializable{
 	@Column(nullable = false, length = 100)
 	private String name;
 	@NotEmpty
-	@Column(nullable = false, length = 100)
+	@Column(nullable = true, length = 100)
 	private String description;
 	@ManyToOne
     @JoinColumn(name = "user_id")

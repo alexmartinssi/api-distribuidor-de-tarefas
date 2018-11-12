@@ -3,6 +3,7 @@ package com.br.apipadrao.entity;
 
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
@@ -29,7 +32,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User  implements Serializable{
+public class User  implements Serializable, UserDetails{
 	
 	/**
 	 * 
@@ -45,7 +48,7 @@ public class User  implements Serializable{
 	@Column(nullable = false, length = 100)
 	private String name;
 	@NotEmpty
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 50, unique = true)
 	private String email;
 	@NotEmpty
 	@Column(unique = true, nullable = false, length = 50)
@@ -55,4 +58,24 @@ public class User  implements Serializable{
 	private String password;
 	@Column(nullable = false, length = 10)
 	private boolean active;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
+	@Override
+	public boolean isEnabled() {
+		return active;
+	}
 }

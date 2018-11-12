@@ -1,5 +1,6 @@
 package com.br.apipadrao.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.apipadrao.dto.TaskDTO;
 import com.br.apipadrao.entity.Task;
+import com.br.apipadrao.entity.User;
 import com.br.apipadrao.service.TaskService;
 
 @RestController
@@ -30,6 +32,16 @@ public class TaskController {
 	@GetMapping("/v1/list/")
 	public ResponseEntity<List<Task>> list(){
 		List<Task> tasks = taskService.list();
+		if(tasks.isEmpty()) {
+			return new ResponseEntity<List<Task>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
+	}
+	
+	@GetMapping("/v1/listByUserId/")
+	public ResponseEntity<List<Task>> list(Principal principal){
+		User user = (User) principal;
+		List<Task> tasks = taskService.listByUserId(user.getId());
 		if(tasks.isEmpty()) {
 			return new ResponseEntity<List<Task>>(HttpStatus.NO_CONTENT);
 		}
