@@ -20,7 +20,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
-
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	public List<User> list() {
 		return userRepository.findAll();
 	}
@@ -29,18 +31,10 @@ public class UserService implements UserDetailsService {
 		return userRepository.getOne(id);
 	}
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-//	public User create(UserDTO userDTO) {
-//		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
-//        return userRepository.save(userDTO.getUser());
-//    }
-
 	public User create(UserDTO userDTO) {
-		userDTO.getUser().setPassword(userDTO.getPassword());
-		return userRepository.save(userDTO.getUser());
-	}
+		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userRepository.save(userDTO.getUser());
+    }
 
 	public User update(UserDTO userDTO) throws Exception {
 		return userRepository.save(updatePassword(userDTO));

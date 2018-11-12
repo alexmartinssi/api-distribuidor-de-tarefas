@@ -34,16 +34,16 @@ public class Register implements Serializable{
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	@NotEmpty
+	@NotEmpty(message="Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
 	private String name;
-	@NotEmpty
+	@NotEmpty(message="Preenchimento obrigatório")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date initialDate;
-	@NotEmpty
+	@NotEmpty(message="Preenchimento obrigatório")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date finalDate;
-	@NotEmpty
+	@NotEmpty(message="Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
 	private String reward;
 
