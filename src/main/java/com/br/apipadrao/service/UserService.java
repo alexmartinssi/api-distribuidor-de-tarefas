@@ -13,8 +13,9 @@ import org.springframework.util.StringUtils;
 
 import com.br.apipadrao.dto.UserDTO;
 import com.br.apipadrao.entity.User;
-import com.br.apipadrao.enums.Perfil;
+import com.br.apipadrao.enums.Profile;
 import com.br.apipadrao.repository.UserRepository;
+import com.br.apipadrao.security.UserSS;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -34,7 +35,7 @@ public class UserService implements UserDetailsService {
 
 	public User create(UserDTO userDTO) {
 		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
-		userDTO.getUser().addPerfil(Perfil.USUARIO);
+		userDTO.getUser().addProfile(Profile.USUARIO);
         return userRepository.save(userDTO.getUser());
     }
 
@@ -62,11 +63,11 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findUserByUsername(username);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
 		if (user == null) {
 			throw new UsernameNotFoundException("Usuário não encontrado.");
 		}
-		return user;
+		return new UserSS(user.getId(), user.getEmail(), user.getPassword(), user.getProfiles());
 	}
 }

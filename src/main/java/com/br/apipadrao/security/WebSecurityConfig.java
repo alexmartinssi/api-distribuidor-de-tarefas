@@ -10,13 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
-import com.br.apipadrao.service.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +20,10 @@ import com.br.apipadrao.service.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private UserService userDetailsService;
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JWTUtil jwtUtil;
 	
 	public static final String[] PUBLIC_MATCHERS_GET = {"/tasks/**", "/users/**", "/registers/**"};
 	
@@ -40,7 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/webfonts/**").permitAll() //
 		.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll() //
 		.anyRequest().authenticated(); //
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil)); //
+      //  http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService)); //
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //
     }
     
 //	@Bean

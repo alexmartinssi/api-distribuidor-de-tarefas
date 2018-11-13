@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.br.apipadrao.entity.Register;
 import com.br.apipadrao.entity.Task;
 import com.br.apipadrao.entity.User;
-import com.br.apipadrao.enums.Perfil;
+import com.br.apipadrao.enums.Profile;
 import com.br.apipadrao.repository.RegisterRepository;
 import com.br.apipadrao.repository.TaskRepository;
 import com.br.apipadrao.repository.UserRepository;
@@ -34,7 +34,7 @@ public class DBService {
 
         //Users
         User user1 = new User(null,"Administrador", "alexmb000@hotmail.com","admin",passwordEncoder.encode("123"),true);
-        user1.addPerfil(Perfil.ADMIN);
+        user1.addProfile(Profile.ADMIN);
         User user2 = new User(null,"Jaqueline", "jaquetgn@gmail.com","jaquetg",passwordEncoder.encode("123"),true);
 
         //Registers

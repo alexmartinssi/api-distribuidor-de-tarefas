@@ -1,16 +1,16 @@
 package com.br.apipadrao.enums;
 
-public enum Perfil {
+public enum Profile {
 	//ROLE_ OBRIGATORIO
 	ADMIN(1, "ROLE_ADMIN"),
 	USUARIO(2, "ROLE_USUARIO");
 
 	private Integer cod;
-	private String descricao;
+	private String description;
 	
-	private Perfil(Integer cod, String descricao)  {
+	private Profile(Integer cod, String description)  {
 		this.cod = cod;
-		this.descricao = descricao;
+		this.description = description;
 	}
 
 	public Integer getCod() {
@@ -21,20 +21,20 @@ public enum Perfil {
 		this.cod = cod;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setDescricao(String description) {
+		this.description = description;
 	}
 	
-	public static Perfil toEnum(Integer cod) {
+	public static Profile toEnum(Integer cod) {
 		if(cod == null) {
 			return null;
 		}
 		
-		for(Perfil e : Perfil.values()) {
+		for(Profile e : Profile.values()) {
 			if(cod.equals(e.cod)) {
 				return e;
 			}

@@ -3,7 +3,6 @@ package com.br.apipadrao.entity;
 
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,11 +19,9 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.br.apipadrao.enums.Perfil;
+import com.br.apipadrao.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -41,15 +38,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class User  implements Serializable, UserDetails{
-	
-	/**
-	 * 
-	 */
+public class User  implements Serializable{
+
 	private static final long serialVersionUID = 1L;
-	/**
-	 * 
-	 */
+
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -69,11 +61,11 @@ public class User  implements Serializable, UserDetails{
 	@Column(nullable = false, length = 10)
 	private boolean active;
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name="perfis")
-	private Set<Integer> perfis = new HashSet<>();
+	@CollectionTable(name="profiles")
+	private Set<Integer> profiles = new HashSet<>();
 	
 	public User() {
-		addPerfil(Perfil.USUARIO);
+		addProfile(Profile.USUARIO);
 	}
 	
 	public User(Long id, @NotEmpty(message = "Preenchimento obrigatório") String name,
@@ -87,33 +79,15 @@ public class User  implements Serializable, UserDetails{
 		this.username = username;
 		this.password = password;
 		this.active = active;
-		addPerfil(Perfil.USUARIO);
+		addProfile(Profile.USUARIO);
 	}
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
-	}
-	@Override
-	public boolean isAccountNonExpired() {
-		return false;
-	}
-	@Override
-	public boolean isAccountNonLocked() {
-		return false;
-	}
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return false;
-	}
-	@Override
-	public boolean isEnabled() {
-		return active;
-	}
-	public Set<Perfil> getPerfis() {
+	
+	public Set<Profile> getProfiles() {
 		//Retorna os perfis dos clientes fazendo a conversão com o Perfil.toEnum e transforma tudo em uma coleção
-		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+		return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
 	}
-	public void addPerfil(Perfil perfil) {
-		perfis.add(perfil.getCod());
+	
+	public void addProfile(Profile profile) {
+		profiles.add(profile.getCod());
 	}
 }
