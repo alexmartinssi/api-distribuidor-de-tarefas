@@ -1,4 +1,4 @@
-package com.br.apipadrao.controller;
+package com.br.apipadrao.resources;
 
 import java.security.Principal;
 import java.util.List;
@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import com.br.apipadrao.service.TaskService;
 
 @RestController
 @RequestMapping("/api/tasks")
-public class TaskController {
+public class TaskResources {
 
 	@Autowired
 	private TaskService taskService;
@@ -57,6 +58,7 @@ public class TaskController {
         return new ResponseEntity<Task>(task, HttpStatus.OK);
     }
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/v1/create/")
 	public ResponseEntity<?> create(@Valid @RequestBody TaskDTO taskDTO) {
 		Task task = taskService.create(taskDTO);
@@ -66,6 +68,7 @@ public class TaskController {
 		return new ResponseEntity<Task>(task, HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody TaskDTO taskDTO) {
 		try {
@@ -79,6 +82,7 @@ public class TaskController {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/v1/remove/{id}")
 	public ResponseEntity<?> remove(@PathVariable Long id) {
 		try {

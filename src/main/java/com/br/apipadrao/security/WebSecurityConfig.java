@@ -25,7 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
-	public static final String[] PUBLIC_MATCHERS_GET = {"/tasks/**", "/users/**", "/registers/**"};
+	public static final String[] PUBLIC_MATCHERS_POST = {"/users/**"};
+	public static final String[] PUBLIC_MATCHERS_GET = {"/tasks/**", "/registers/**"};
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -37,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	http.cors().and().csrf().disable(); //
         http.authorizeRequests() //
 		.antMatchers("/css/**", "/fonts/**", "/images/**", "/js/**", "/webfonts/**").permitAll() //
+		.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll() //
 		.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll() //
 		.anyRequest().authenticated(); //
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil)); //

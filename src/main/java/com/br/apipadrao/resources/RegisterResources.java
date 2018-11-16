@@ -1,4 +1,4 @@
-package com.br.apipadrao.controller;
+package com.br.apipadrao.resources;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ import com.br.apipadrao.service.RegisterService;
 
 @RestController
 @RequestMapping("/api/registers")
-public class RegisterController {
+public class RegisterResources {
 
 	@Autowired
 	private RegisterService registerService;
@@ -45,6 +46,7 @@ public class RegisterController {
         return new ResponseEntity<Register>(register, HttpStatus.OK);
     }
 	
+	@PreAuthorize("hasAnyRole('ADMIN', USUARIO)")
 	@PostMapping("/v1/create/")
 	public ResponseEntity<?> create(@Valid @RequestBody RegisterDTO registerDTO) {
 		Register register = registerService.create(registerDTO);
@@ -54,6 +56,7 @@ public class RegisterController {
 		return new ResponseEntity<Register>(register, HttpStatus.CREATED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', USUARIO)")
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody RegisterDTO registerDTO) {
 		try {
@@ -67,6 +70,7 @@ public class RegisterController {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/v1/remove/{id}")
 	public ResponseEntity<?> remove(@PathVariable Long id) {
 		try {
