@@ -1,5 +1,7 @@
 package com.br.apipadrao.resources;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,16 +30,24 @@ public class TaskResources {
 	@Autowired
 	private TaskService taskService;
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping("/v1/list-all-tasks/")
+	public ResponseEntity<List<Task>> list(){
+		List<Task> tasks = taskService.list();
+		if(tasks.isEmpty()) {
+			return new ResponseEntity<List<Task>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
+	}
+	
 	@GetMapping("/v1/list/")
-	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<Page<Task>> findPage (
 		//Usa parâmetros opcionais, primeiro definimos qual é a variável que vai receber o valor e depois passamos um valor padrão
 			@RequestParam(value="page", defaultValue="0") Integer page, 
 			@RequestParam(value="linesPerPage", defaultValue="10") Integer linesPerPage, 
-			@RequestParam(value="orderBy", defaultValue="inicialDate") String orderBy, 
-			@RequestParam(value="direction", defaultValue="DESC") String direction) {
+			@RequestParam(value="orderBy", defaultValue="register.initialDate") String orderBy, 
+			@RequestParam(value="direction", defaultValue="ASC") String direction) {
 		
-		//FindAll retorna uma LISTA de Pedidos
 		Page<Task> objs = taskService.findPage(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok().body(objs);
 	}
