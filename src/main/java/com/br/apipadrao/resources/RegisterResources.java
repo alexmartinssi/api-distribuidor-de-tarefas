@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.apipadrao.domain.Register;
 import com.br.apipadrao.dto.RegisterDTO;
-import com.br.apipadrao.entity.Register;
-import com.br.apipadrao.service.RegisterService;
+import com.br.apipadrao.services.RegisterService;
 
 @RestController
 @RequestMapping("/api/registers")

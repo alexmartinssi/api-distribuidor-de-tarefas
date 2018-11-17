@@ -1,13 +1,13 @@
-package com.br.apipadrao.service;
+package com.br.apipadrao.services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.br.apipadrao.domain.Task;
 import com.br.apipadrao.dto.TaskDTO;
-import com.br.apipadrao.entity.Task;
-import com.br.apipadrao.repository.TaskRepository;
+import com.br.apipadrao.repositories.TaskRepository;
 
 @Service
 public class TaskService{

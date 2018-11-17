@@ -1,4 +1,4 @@
-package com.br.apipadrao.entity;
+package com.br.apipadrao.domain;
 
 
 

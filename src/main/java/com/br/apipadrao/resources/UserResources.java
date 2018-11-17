@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.apipadrao.domain.User;
 import com.br.apipadrao.dto.UserDTO;
-import com.br.apipadrao.entity.User;
-import com.br.apipadrao.service.UserService;
+import com.br.apipadrao.enums.Profile;
+import com.br.apipadrao.security.UserSS;
+import com.br.apipadrao.services.UserService;
+import com.br.apipadrao.services.exceptions.AuthorizationException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -40,6 +43,12 @@ public class UserResources {
 	
 	@GetMapping("/v1/user/{id}")
     public ResponseEntity<?> find(@PathVariable("id") long id) {
+		
+		UserSS userAuthenticated = userService.authenticated();
+		if(userAuthenticated == null || !userAuthenticated.hasRole(Profile.ADMIN) && id != userAuthenticated.getId()) {
+			throw new  AuthorizationException("Acesso negado.");
+		}
+		
         User user = userService.findById(id);
         if (user == null) {
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);

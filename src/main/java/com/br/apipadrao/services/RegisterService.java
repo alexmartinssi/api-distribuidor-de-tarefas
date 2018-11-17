@@ -1,13 +1,13 @@
-package com.br.apipadrao.service;
+package com.br.apipadrao.services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.br.apipadrao.domain.Register;
 import com.br.apipadrao.dto.RegisterDTO;
-import com.br.apipadrao.entity.Register;
-import com.br.apipadrao.repository.RegisterRepository;
+import com.br.apipadrao.repositories.RegisterRepository;
 
 @Service
 public class RegisterService{

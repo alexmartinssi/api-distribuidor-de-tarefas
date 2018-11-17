@@ -2,7 +2,7 @@ package com.br.apipadrao.dto;
 
 import java.io.Serializable;
 
-import com.br.apipadrao.entity.Task;
+import com.br.apipadrao.domain.Task;
 
 import lombok.Data;
 

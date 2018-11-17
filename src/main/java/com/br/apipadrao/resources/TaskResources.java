@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.apipadrao.domain.Task;
+import com.br.apipadrao.domain.User;
 import com.br.apipadrao.dto.TaskDTO;
-import com.br.apipadrao.entity.Task;
-import com.br.apipadrao.entity.User;
-import com.br.apipadrao.service.TaskService;
+import com.br.apipadrao.services.TaskService;
 
 @RestController
 @RequestMapping("/api/tasks")

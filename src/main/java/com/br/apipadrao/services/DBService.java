@@ -1,4 +1,4 @@
-package com.br.apipadrao.service;
+package com.br.apipadrao.services;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.br.apipadrao.entity.Register;
-import com.br.apipadrao.entity.Task;
-import com.br.apipadrao.entity.User;
+import com.br.apipadrao.domain.Register;
+import com.br.apipadrao.domain.Task;
+import com.br.apipadrao.domain.User;
 import com.br.apipadrao.enums.Profile;
-import com.br.apipadrao.repository.RegisterRepository;
-import com.br.apipadrao.repository.TaskRepository;
-import com.br.apipadrao.repository.UserRepository;
+import com.br.apipadrao.repositories.RegisterRepository;
+import com.br.apipadrao.repositories.TaskRepository;
+import com.br.apipadrao.repositories.UserRepository;
 
 @Service
 public class DBService {
