@@ -1,6 +1,7 @@
 package com.br.apipadrao.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,8 @@ import com.br.apipadrao.dto.UserDTO;
 import com.br.apipadrao.enums.Profile;
 import com.br.apipadrao.repositories.UserRepository;
 import com.br.apipadrao.security.UserSS;
+import com.br.apipadrao.services.exceptions.AuthorizationException;
+import com.br.apipadrao.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -38,8 +41,16 @@ public class UserService implements UserDetailsService {
 		return userRepository.findAll();
 	}
 
-	public User findById(long id) {
-		return userRepository.getOne(id);
+	public User find(Long id) {
+		UserSS userSS = this.authenticated();
+		if((userSS == null || !userSS.hasRole(Profile.ADMIN)) && !id.equals(userSS.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		Optional<User> user = userRepository.findById(id);
+		
+		return user.orElseThrow(()-> new ObjectNotFoundException("O Objeto não foi contrado, ID: "+id+
+				", Usuário: " + User.class.getName()));
 	}
 
 	public User create(UserDTO userDTO) {

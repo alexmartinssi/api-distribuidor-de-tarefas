@@ -49,7 +49,7 @@ public class UserResources {
 			throw new  AuthorizationException("Acesso negado.");
 		}
 		
-        User user = userService.findById(id);
+        User user = userService.find(id);
         if (user == null) {
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }

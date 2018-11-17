@@ -1,11 +1,15 @@
 package com.br.apipadrao.repositories;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.apipadrao.domain.Task;
+import com.br.apipadrao.domain.User;
 
 public interface TaskRepository extends JpaRepository<Task,Long> {
-	List<Task> findAllByUserId(Long id);
+	
+	@Transactional(readOnly = true)
+	Page<Task> findByUser(User user, Pageable pegable);
 }

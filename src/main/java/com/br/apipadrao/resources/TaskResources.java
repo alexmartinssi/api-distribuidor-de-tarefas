@@ -1,11 +1,9 @@
 package com.br.apipadrao.resources;
 
-import java.security.Principal;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.apipadrao.domain.Task;
-import com.br.apipadrao.domain.User;
 import com.br.apipadrao.dto.TaskDTO;
 import com.br.apipadrao.services.TaskService;
 
@@ -31,22 +30,17 @@ public class TaskResources {
 	private TaskService taskService;
 	
 	@GetMapping("/v1/list/")
-	public ResponseEntity<List<Task>> list(){
-		List<Task> tasks = taskService.list();
-		if(tasks.isEmpty()) {
-			return new ResponseEntity<List<Task>>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
-	}
-	
-	@GetMapping("/v1/listByUserId/")
-	public ResponseEntity<List<Task>> list(Principal principal){
-		User user = (User) principal;
-		List<Task> tasks = taskService.listByUserId(user.getId());
-		if(tasks.isEmpty()) {
-			return new ResponseEntity<List<Task>>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<Page<Task>> findPage (
+		//Usa parâmetros opcionais, primeiro definimos qual é a variável que vai receber o valor e depois passamos um valor padrão
+			@RequestParam(value="page", defaultValue="0") Integer page, 
+			@RequestParam(value="linesPerPage", defaultValue="10") Integer linesPerPage, 
+			@RequestParam(value="orderBy", defaultValue="inicialDate") String orderBy, 
+			@RequestParam(value="direction", defaultValue="DESC") String direction) {
+		
+		//FindAll retorna uma LISTA de Pedidos
+		Page<Task> objs = taskService.findPage(page, linesPerPage, orderBy, direction);
+		return ResponseEntity.ok().body(objs);
 	}
 	
 	@GetMapping("/v1/task/{id}")
