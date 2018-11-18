@@ -26,7 +26,6 @@ public class DBService {
     private TaskRepository taskRepository;
     @Autowired
     private RegisterRepository registerRepository;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 

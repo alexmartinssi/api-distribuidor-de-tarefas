@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
-	public static final String[] PUBLIC_MATCHERS_POST = {"/users/**"};
+	public static final String[] PUBLIC_MATCHERS_POST = {"/users/**", "/auth/v1/forgot/**"};
 	public static final String[] PUBLIC_MATCHERS_GET = {"/tasks/**", "/registers/**"};
 	
 	@Override

@@ -49,5 +49,22 @@ public class Task implements Serializable{
 	@ManyToOne
     @JoinColumn(name = "register_id")
     private Register register;
-
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(register.getName());
+		builder.append("\n");
+		builder.append("Data Inicial: " + register.getInitialDate());
+		builder.append("\n");
+		builder.append("Data final: " + register.getFinalDate());
+		builder.append("\n");
+		builder.append("Premiação: " + register.getReward());
+		builder.append("\n");
+		builder.append("Tarefa: " + name);
+		builder.append("\n");
+		if(!description.isEmpty()) {
+			builder.append("Descrição: " + description);
+		}
+		return builder.toString();
+	}
 }
