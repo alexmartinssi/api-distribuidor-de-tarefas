@@ -9,7 +9,7 @@ public class MockEmailService extends AbstractEmailService{
 	private static final Logger log = LoggerFactory.getLogger(MockEmailService.class);
 	
 	@Override
-	public void sandEmail(SimpleMailMessage email) {
+	public void sendEmail(SimpleMailMessage email) {
 		log.info("Simulando envio de email");
 		log.info(email.toString());
 		log.info("Email enviado");

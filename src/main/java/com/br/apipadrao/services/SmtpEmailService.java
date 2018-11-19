@@ -14,7 +14,7 @@ public class SmtpEmailService extends AbstractEmailService {
 	private static final Logger log = LoggerFactory.getLogger(SmtpEmailService.class);
 	
 	@Override
-	public void sandEmail(SimpleMailMessage email) {
+	public void sendEmail(SimpleMailMessage email) {
 		log.info("Envio de email.");
 		emailSender.send(email);
 		log.info("Email enviado.");

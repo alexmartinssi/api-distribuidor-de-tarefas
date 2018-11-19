@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:remove="all">Order Confirmation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<div>
+		<h3>
+			Nome do Registro: <span th:text="${task.register.name}"> </span>
+		</h3>
+		<p>
+			Data inicial: <span th:text="${task.register.initialDate}"></span>
+		</p>
+		<p>
+			Data de Encerramento: <span th:text="${task.register.finalDate}"></span>
+		</p>
+		<p>
+			Premicação: <span th:text="${task.register.reward}"></span>
+		</p>
+		<p>
+			Tarefa: <span th:text="${task.name}"></span>
+		</p>
+	</div>
+</body>
+</html>

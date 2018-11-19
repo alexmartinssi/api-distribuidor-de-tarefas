@@ -33,7 +33,7 @@ public class AuthService {
 		user.setPassword(passwordEnconder.encode(newPass));
 		
 		userRepository.save(user);
-		emailService.sandNewPasswordEmail(user, newPass);
+		emailService.sendNewPasswordEmail(user, newPass);
 	}
 
 	//Cria uma senha
