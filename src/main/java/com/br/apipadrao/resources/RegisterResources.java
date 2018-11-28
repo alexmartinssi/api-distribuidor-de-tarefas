@@ -27,49 +27,49 @@ public class RegisterResources {
 
 	@Autowired
 	private RegisterService registerService;
-	
+
 	@GetMapping("/v1/list/")
-	public ResponseEntity<List<Register>> list(){
+	public ResponseEntity<List<Register>> list() {
 		List<Register> registers = registerService.list();
-		if(registers.isEmpty()) {
+		if (registers.isEmpty()) {
 			return new ResponseEntity<List<Register>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Register>>(registers, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/v1/register/{id}")
-    public ResponseEntity<?> get(@PathVariable("id") long id) {
-        Register register = registerService.findById(id);
-        if (register == null) {
-            return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<Register>(register, HttpStatus.OK);
-    }
-	
+	public ResponseEntity<?> get(@PathVariable("id") long id) {
+		Register register = registerService.findById(id);
+		if (register == null) {
+			return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Register>(register, HttpStatus.OK);
+	}
+
 	@PreAuthorize("hasAnyRole('ADMIN', USUARIO)")
 	@PostMapping("/v1/create/")
 	public ResponseEntity<?> create(@Valid @RequestBody RegisterDTO registerDTO) {
 		Register register = registerService.create(registerDTO);
-		if(register == null) {
+		if (register == null) {
 			return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Register>(register, HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN', USUARIO)")
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody RegisterDTO registerDTO) {
 		try {
 			Register register = registerService.update(registerDTO);
-			if(register == null) {
+			if (register == null) {
 				return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<Register>(register, HttpStatus.OK);	
+			return new ResponseEntity<Register>(register, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Register>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/v1/remove/{id}")
 	public ResponseEntity<?> remove(@PathVariable Long id) {

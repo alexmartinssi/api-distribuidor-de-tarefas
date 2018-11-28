@@ -17,29 +17,29 @@ import com.br.apipadrao.services.AuthService;
 import com.br.apipadrao.services.UserService;
 
 @RestController
-@RequestMapping(value="/api/auth")
+@RequestMapping(value = "/api/auth")
 public class AuthResources {
-	
+
 	@Autowired
 	private JWTUtil jwtUtil;
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private AuthService authService;
-	
+
 	@RequestMapping(value = "/v1/refresh_token", method = RequestMethod.POST)
 	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
 		UserSS user = userService.authenticated();
 		String token = jwtUtil.generateToken(user.getUsername());
-		
+
 		response.addHeader("Authorization", "Bearer " + token);
 		response.addHeader("access-control-expose-headers", "Authorization");
 
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@RequestMapping(value = "/v1/forgot", method = RequestMethod.POST)
-	public ResponseEntity<Void> forgot (@Valid @RequestBody EmailDTO objDTO) {
+	public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDTO) {
 		authService.sandNewPassword(objDTO.getEmail());
 		return ResponseEntity.noContent().build();
 	}

@@ -10,23 +10,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.br.apipadrao.enums.Profile;
 
-public class UserSS implements UserDetails{
+public class UserSS implements UserDetails {
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private Long id;
 	private String email;
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
-	
-	public UserSS() {}
-	
-	public UserSS(Long id, String email, String password, Set<Profile> perfis) {
+
+	public UserSS() {
+	}
+
+	public UserSS(Long id, String email, String password, Set<Profile> profiles) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.password = password;
-		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescription())).collect(Collectors.toList());
+		this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription()))
+				.collect(Collectors.toList());
 	}
 
 	public Long getId() {
@@ -55,7 +56,7 @@ public class UserSS implements UserDetails{
 
 	@Override
 	public boolean isAccountNonLocked() {
- 		return true;
+		return true;
 	}
 
 	@Override
@@ -71,5 +72,5 @@ public class UserSS implements UserDetails{
 	public boolean hasRole(Profile profile) {
 		return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
 	}
-	
+
 }

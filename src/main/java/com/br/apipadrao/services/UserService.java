@@ -28,36 +28,51 @@ public class UserService implements UserDetailsService {
 	private UserRepository userRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	public UserSS authenticated() {
 		try {
 			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
-	
+
+	@SuppressWarnings("null")
+	public User findByEmail(String email) {
+		UserSS user = this.authenticated();
+		if (user == null && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		User obj = userRepository.findByEmail(email);
+		if (obj == null) {
+			throw new ObjectNotFoundException(
+					"Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + User.class.getName());
+		}
+		return obj;
+	}
+
 	public List<User> list() {
 		return userRepository.findAll();
 	}
 
 	public User find(Long id) {
 		UserSS userSS = this.authenticated();
-		if((userSS == null || !userSS.hasRole(Profile.ADMIN)) && !id.equals(userSS.getId())) {
+		if ((userSS == null || !userSS.hasRole(Profile.ADMIN)) && !id.equals(userSS.getId())) {
 			throw new AuthorizationException("Acesso negado");
 		}
-		
+
 		Optional<User> user = userRepository.findById(id);
-		
-		return user.orElseThrow(()-> new ObjectNotFoundException("O Objeto não foi contrado, ID: "+id+
-				", Usuário: " + User.class.getName()));
+
+		return user.orElseThrow(() -> new ObjectNotFoundException(
+				"O Objeto não foi contrado, ID: " + id + ", Usuário: " + User.class.getName()));
 	}
 
 	public User create(UserDTO userDTO) {
 		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		userDTO.getUser().addProfile(Profile.USUARIO);
-        return userRepository.save(userDTO.getUser());
-    }
+		return userRepository.save(userDTO.getUser());
+	}
 
 	public User update(UserDTO userDTO) throws Exception {
 		return userRepository.save(updatePassword(userDTO));

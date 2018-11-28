@@ -29,62 +29,60 @@ public class TaskResources {
 
 	@Autowired
 	private TaskService taskService;
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/v1/list-all-tasks/")
-	public ResponseEntity<List<Task>> list(){
+	public ResponseEntity<List<Task>> list() {
 		List<Task> tasks = taskService.list();
-		if(tasks.isEmpty()) {
+		if (tasks.isEmpty()) {
 			return new ResponseEntity<List<Task>>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/v1/list/")
-	public ResponseEntity<Page<Task>> findPage (
-		//Usa parâmetros opcionais, primeiro definimos qual é a variável que vai receber o valor e depois passamos um valor padrão
-			@RequestParam(value="page", defaultValue="0") Integer page, 
-			@RequestParam(value="linesPerPage", defaultValue="10") Integer linesPerPage, 
-			@RequestParam(value="orderBy", defaultValue="register.initialDate") String orderBy, 
-			@RequestParam(value="direction", defaultValue="ASC") String direction) {
-		
+	public ResponseEntity<Page<Task>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
+			@RequestParam(value = "orderBy", defaultValue = "register.initialDate") String orderBy,
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+
 		Page<Task> objs = taskService.findPage(page, linesPerPage, orderBy, direction);
 		return ResponseEntity.ok().body(objs);
 	}
-	
+
 	@GetMapping("/v1/task/{id}")
-    public ResponseEntity<?> get(@PathVariable("id") long id) {
-        Task task = taskService.findById(id);
-        if (task == null) {
-            return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<Task>(task, HttpStatus.OK);
-    }
-	
+	public ResponseEntity<?> get(@PathVariable("id") long id) {
+		Task task = taskService.findById(id);
+		if (task == null) {
+			return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Task>(task, HttpStatus.OK);
+	}
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/v1/create/")
 	public ResponseEntity<?> create(@Valid @RequestBody TaskDTO taskDTO) {
 		Task task = taskService.create(taskDTO);
-		if(task == null) {
+		if (task == null) {
 			return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Task>(task, HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody TaskDTO taskDTO) {
 		try {
-			Task task= taskService.update(taskDTO);
-			if(task == null) {
+			Task task = taskService.update(taskDTO);
+			if (task == null) {
 				return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<Task>(task, HttpStatus.OK);	
+			return new ResponseEntity<Task>(task, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Task>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/v1/remove/{id}")
 	public ResponseEntity<?> remove(@PathVariable Long id) {
