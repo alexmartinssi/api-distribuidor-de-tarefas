@@ -68,8 +68,9 @@ public class UserService implements UserDetailsService {
 				"O Objeto não foi contrado, ID: " + id + ", Usuário: " + User.class.getName()));
 	}
 
+	@Transactional
 	public User create(UserDTO userDTO) {
-		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		userDTO.getUser().setPassword(passwordEncoder.encode(userDTO.getUser().getPassword()));
 		userDTO.getUser().addProfile(Profile.USUARIO);
 		return userRepository.save(userDTO.getUser());
 	}
@@ -83,8 +84,8 @@ public class UserService implements UserDetailsService {
 		User oldUser = userRepository.getOne(newUser.getId());
 
 		newUser.setPassword(oldUser.getPassword());
-		if (!StringUtils.isEmpty(userDTO.getPassword())) {
-			String hash = passwordEncoder.encode(userDTO.getPassword());
+		if (!StringUtils.isEmpty(userDTO.getUser().getPassword())) {
+			String hash = passwordEncoder.encode(userDTO.getUser().getPassword());
 			newUser.setPassword(hash);
 		}
 		return newUser;

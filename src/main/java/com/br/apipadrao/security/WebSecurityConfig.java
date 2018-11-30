@@ -30,8 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JWTUtil jwtUtil;
 
-	public static final String[] PUBLIC_MATCHERS_POST = { "/users/**", "/auth/v1/forgot/**" };
-	public static final String[] PUBLIC_MATCHERS_GET = { "/tasks/**", "/registers/**" };
+	public static final String[] PUBLIC_MATCHERS_POST = { "/api/users/**", "/api/auth/v1/forgot/**" };
+	public static final String[] PUBLIC_MATCHERS_GET = { "/api/tasks/**", "/api/registers/**" };
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

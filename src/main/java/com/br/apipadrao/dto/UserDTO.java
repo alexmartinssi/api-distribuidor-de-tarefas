@@ -2,17 +2,31 @@ package com.br.apipadrao.dto;
 
 import java.io.Serializable;
 
-import com.br.apipadrao.domain.User;
+import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Data
-public class UserDTO implements Serializable{
+public class UserDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private User user;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Column(nullable = false, length = 100)
+	private String name;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Column(nullable = false, length = 50, unique = true)
+	private String email;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Column(unique = true, nullable = false, length = 50)
+	private String username;
+	@JsonIgnore
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Column(nullable = false, length = 200)
 	private String password;
 }
