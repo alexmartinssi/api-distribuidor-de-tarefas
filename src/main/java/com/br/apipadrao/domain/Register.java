@@ -29,26 +29,26 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Register implements Serializable{
+public class Register implements Serializable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	@NotEmpty(message="Preenchimento obrigatório")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long              id;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String name;
-	@NotEmpty(message="Preenchimento obrigatório")
+	private String            name;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private Date initialDate;
-	@NotEmpty(message="Preenchimento obrigatório")
+	private Date              initialDate;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private Date finalDate;
-	@NotEmpty(message="Preenchimento obrigatório")
+	private Date              finalDate;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String reward;
-
+	private String            reward;
+	
 }

@@ -28,27 +28,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Task implements Serializable{
+public class Task implements Serializable {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	@NotEmpty(message="Preenchimento obrigatório")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long              id;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String name;
-	@NotEmpty(message="Preenchimento obrigatório")
+	private String            name;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = true, length = 100)
-	private String description;
+	private String            description;
 	@ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+	@JoinColumn(name = "user_id")
+	private User              user;
 	@ManyToOne
-    @JoinColumn(name = "register_id")
-    private Register register;
+	@JoinColumn(name = "register_id")
+	private Register          register;
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -62,7 +63,7 @@ public class Task implements Serializable{
 		builder.append("\n");
 		builder.append("Tarefa: " + name);
 		builder.append("\n");
-		if(!description.isEmpty()) {
+		if (!description.isEmpty()) {
 			builder.append("Descrição: " + description);
 		}
 		return builder.toString();

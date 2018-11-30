@@ -1,7 +1,5 @@
 package com.br.apipadrao.domain;
 
-
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,37 +29,37 @@ import lombok.Setter;
 @Entity
 @Component
 @Table(name = "api_user", //
-	   uniqueConstraints = { //
-		@UniqueConstraint(columnNames = {"username"}), //
-		@UniqueConstraint(columnNames = {"email"}) //
-	  }) //
+        uniqueConstraints = { //
+                @UniqueConstraint(columnNames = { "username" }), //
+                @UniqueConstraint(columnNames = { "email" }) //
+		}) //
 @Getter
 @Setter
 @EqualsAndHashCode
-public class User  implements Serializable{
-
+public class User implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	@NotEmpty(message="Preenchimento obrigatório")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long         id;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String name;
-	@NotEmpty(message="Preenchimento obrigatório")
+	private String       name;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 50, unique = true)
-	private String email;
-	@NotEmpty(message="Preenchimento obrigatório")
+	private String       email;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(unique = true, nullable = false, length = 50)
-	private String username;
+	private String       username;
 	@JsonIgnore
-	@NotEmpty(message="Preenchimento obrigatório")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 200)
-	private String password;
+	private String       password;
 	@Column(nullable = false, length = 10)
-	private boolean active;
+	private boolean      active;
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name="profiles")
+	@CollectionTable(name = "profiles")
 	private Set<Integer> profiles = new HashSet<>();
 	
 	public User() {
@@ -69,9 +67,9 @@ public class User  implements Serializable{
 	}
 	
 	public User(Long id, @NotEmpty(message = "Preenchimento obrigatório") String name,
-			@NotEmpty(message = "Preenchimento obrigatório") String email,
-			@NotEmpty(message = "Preenchimento obrigatório") String username,
-			@NotEmpty(message = "Preenchimento obrigatório") String password, boolean active) {
+	        @NotEmpty(message = "Preenchimento obrigatório") String email,
+	        @NotEmpty(message = "Preenchimento obrigatório") String username,
+	        @NotEmpty(message = "Preenchimento obrigatório") String password, boolean active) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -82,8 +80,20 @@ public class User  implements Serializable{
 		addProfile(Profile.USUARIO);
 	}
 	
+	public User(@NotEmpty(message = "Preenchimento obrigatório") String name,
+	        @NotEmpty(message = "Preenchimento obrigatório") String email,
+	        @NotEmpty(message = "Preenchimento obrigatório") String username) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.username = username;
+		this.active = true;
+		addProfile(Profile.USUARIO);
+	}
+	
 	public Set<Profile> getProfiles() {
-		//Retorna os perfis dos clientes fazendo a conversão com o Perfil.toEnum e transforma tudo em uma coleção
+		// Retorna os perfis dos clientes fazendo a conversão com o
+		// Perfil.toEnum e transforma tudo em uma coleção
 		return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
 	}
 	
