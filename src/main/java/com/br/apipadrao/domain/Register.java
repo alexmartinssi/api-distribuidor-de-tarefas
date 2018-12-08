@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
@@ -30,25 +31,29 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class Register implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long              id;
+	private Long id;
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String            name;
-	@NotEmpty(message = "Preenchimento obrigatório")
+	private String name;
+	@NotNull(message = "Preenchimento obrigatório")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private Date              initialDate;
-	@NotEmpty(message = "Preenchimento obrigatório")
+	private Date initialDate;
+	@NotNull(message = "Preenchimento obrigatório")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private Date              finalDate;
+	private Date finalDate;
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String            reward;
-	
+	private String reward;
+
+	public Register(String name, Date initialDate, Date finalDate, String reward) {
+		this.name = name;
+		this.initialDate = initialDate;
+		this.finalDate = finalDate;
+		this.reward = reward;
+	}
+
 }

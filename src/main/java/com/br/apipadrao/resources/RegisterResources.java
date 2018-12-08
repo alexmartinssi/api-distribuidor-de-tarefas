@@ -46,21 +46,21 @@ public class RegisterResources {
 		return new ResponseEntity<Register>(register, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN', USUARIO)")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
 	@PostMapping("/v1/create/")
 	public ResponseEntity<?> create(@Valid @RequestBody RegisterDTO registerDTO) {
-		Register register = registerService.create(registerDTO);
+		Register register = registerService.save(registerDTO);
 		if (register == null) {
 			return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Register>(register, HttpStatus.CREATED);
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN', USUARIO)")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody RegisterDTO registerDTO) {
 		try {
-			Register register = registerService.update(registerDTO);
+			Register register = registerService.save(registerDTO);
 			if (register == null) {
 				return new ResponseEntity<Register>(HttpStatus.NOT_FOUND);
 			}

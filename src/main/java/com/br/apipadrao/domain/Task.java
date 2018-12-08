@@ -17,39 +17,37 @@ import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Component
 @Table(name = "api_task") //
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
 public class Task implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long              id;
+	private Long id;
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
-	private String            name;
+	private String name;
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = true, length = 100)
-	private String            description;
+	private String description;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private User              user;
+	private User user;
 	@ManyToOne
 	@JoinColumn(name = "register_id")
-	private Register          register;
-	
+	private Register register;
+
+	public Task() {
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

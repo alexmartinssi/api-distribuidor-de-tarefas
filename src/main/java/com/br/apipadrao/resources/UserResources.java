@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.apipadrao.domain.User;
 import com.br.apipadrao.dto.UserDTO;
-import com.br.apipadrao.enums.Profile;
-import com.br.apipadrao.security.UserSS;
 import com.br.apipadrao.services.UserService;
-import com.br.apipadrao.services.exceptions.AuthorizationException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,7 +30,7 @@ public class UserResources {
 	@Autowired
 	private UserService userService;
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN','USUARIO')")
 	@GetMapping("/v1/list/")
 	public ResponseEntity<List<User>> list() {
 		List<User> users = userService.list();
@@ -45,12 +42,6 @@ public class UserResources {
 
 	@GetMapping("/v1/user/{id}")
 	public ResponseEntity<?> find(@PathVariable("id") long id) {
-
-		UserSS userAuthenticated = userService.authenticated();
-		if (userAuthenticated == null || !userAuthenticated.hasRole(Profile.ADMIN) && id != userAuthenticated.getId()) {
-			throw new AuthorizationException("Acesso negado.");
-		}
-
 		User user = userService.find(id);
 		if (user == null) {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);

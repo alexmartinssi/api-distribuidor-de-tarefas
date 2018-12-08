@@ -32,5 +32,4 @@ public class SmtpEmailService extends AbstractEmailService {
 		log.info("Email enviado.");
 
 	}
-
 }
