@@ -35,7 +35,6 @@ public class Task implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
 	private String name;
-	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = true, length = 100)
 	private String description;
 	@ManyToOne
