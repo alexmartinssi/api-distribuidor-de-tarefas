@@ -2,7 +2,11 @@ package com.br.apipadrao.dto;
 
 import java.io.Serializable;
 
-import com.br.apipadrao.domain.Task;
+import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
+
+import com.br.apipadrao.domain.Register;
+import com.br.apipadrao.domain.User;
 
 import lombok.Data;
 
@@ -10,5 +14,11 @@ import lombok.Data;
 public class TaskDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Task task;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Column(nullable = false, length = 100)
+	private String name;
+	@Column(nullable = true, length = 100)
+	private String description;
+	private User user;
+	private Register register;
 }

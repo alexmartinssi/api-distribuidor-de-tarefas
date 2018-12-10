@@ -11,19 +11,9 @@ import com.br.apipadrao.services.MockEmailService;
 @Profile("test")
 public class TestConfig {
 
-
-//    @Autowired
-//    private DBService dbService;
-//    
-//    @Bean
-//    public boolean instantiateDatabase() throws ParseException {
-//        dbService.instantiateTestDatabase();
-//        return true;
-//    }
-
-    @Bean
+	@Bean
 	public EmailService emailService() {
 		return new MockEmailService();
 	}
-    
+
 }

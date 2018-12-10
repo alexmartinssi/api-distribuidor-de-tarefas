@@ -17,8 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
-import org.springframework.stereotype.Component;
-
 import com.br.apipadrao.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,7 +26,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Component
 @Table(name = "api_user", //
 		uniqueConstraints = { //
 				@UniqueConstraint(columnNames = { "username" }), //
@@ -43,19 +40,15 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
 	private String name;
-	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 50, unique = true)
 	private String email;
-	@NotEmpty(message = "Preenchimento obrigatório")
-	@Column(unique = true, nullable = false, length = 50)
+	@Column(nullable = false, length = 50, unique = true)
 	private String username;
 	@JsonIgnore
-	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 200)
 	private String password;
 	@Column(nullable = false, length = 10)

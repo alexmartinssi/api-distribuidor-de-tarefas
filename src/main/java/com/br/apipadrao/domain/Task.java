@@ -10,9 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-
-import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,7 +17,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Component
 @Table(name = "api_task") //
 @AllArgsConstructor
 @Getter
@@ -30,9 +26,8 @@ public class Task implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
 	private String name;
 	@Column(nullable = true, length = 100)

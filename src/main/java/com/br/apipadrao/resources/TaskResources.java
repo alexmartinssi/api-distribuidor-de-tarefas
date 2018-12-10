@@ -62,7 +62,7 @@ public class TaskResources {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping("/v1/create/")
 	public ResponseEntity<?> create(@Valid @RequestBody TaskDTO taskDTO) {
-		Task task = taskService.create(taskDTO);
+		Task task = taskService.save(taskDTO);
 		if (task == null) {
 			return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
 		}
@@ -73,7 +73,7 @@ public class TaskResources {
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody TaskDTO taskDTO) {
 		try {
-			Task task = taskService.update(taskDTO);
+			Task task = taskService.save(taskDTO);
 			if (task == null) {
 				return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
 			}

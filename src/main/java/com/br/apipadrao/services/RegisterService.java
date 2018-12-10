@@ -35,39 +35,49 @@ public class RegisterService {
 
 	@Transactional
 	public Register save(RegisterDTO registerDTO) {
+		Random random = new Random();
+		int index = 0;
+		int userListIndex = 0;
+		Task task = null;
+		List<Task> tasks = registerDTO.getTasks();
+		List<User> users = registerDTO.getUsers();
 		Register register = new Register(registerDTO.getName(), registerDTO.getInitialDate(),
 				registerDTO.getFinalDate(), registerDTO.getReward());
-
 		register = registerRepository.save(register);
-
-		List<User> users = registerDTO.getUsers();
-		Random r = new Random();
-
-		for (int i = 0; i < users.size(); i++) {
-			User u = userRepository.findByEmail(users.get(i).getEmail());
-
-			int sorteio = 0;
-			Task t = null;
-			while (true) {
-				try {
-					sorteio = r.nextInt(registerDTO.getTasks().size());
-					t = registerDTO.getTasks().get(sorteio);
-
-					if (t != null) {
-						break;
+		while (true) {
+			if (tasks.isEmpty()) {
+				break;
+			}
+			for (userListIndex = 0; userListIndex < users.size(); userListIndex++) {
+				User u = userRepository.findByEmail(users.get(userListIndex).getEmail());
+				while (true) {
+					try {
+						if (tasks.isEmpty() && tasks.size() == 0) {
+							break;
+						} else {
+							index = random.nextInt(tasks.size());
+							task = tasks.get(index);
+							if (task != null) {
+								break;
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				}
+				if (task != null) {
+					task.setUser(u);
+					task.setRegister(register);
+					if (task.getDescription().isEmpty()) {
+						task.setDescription("Sem descrição");
+					}
+					taskRepository.save(task);
+					task = null;
+					tasks.remove(index);
 				}
 			}
-
-			t.setUser(u);
-			t.setRegister(register);
-
-			taskRepository.save(t);
-			registerDTO.getTasks().remove(sorteio);
+			userListIndex = 0;
 		}
-
 		return register;
 	}
 

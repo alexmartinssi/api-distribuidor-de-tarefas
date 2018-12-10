@@ -16,44 +16,41 @@ import com.br.apipadrao.security.UserSS;
 import com.br.apipadrao.services.exceptions.AuthorizationException;
 
 @Service
-public class TaskService{
-	
+public class TaskService {
+
 	@Autowired
-    private TaskRepository taskRepository;
-	
+	private TaskRepository taskRepository;
+
 	@Autowired
-    private UserService userService;
-	
-	public List<Task> list(){
+	private UserService userService;
+
+	public List<Task> list() {
 		return taskRepository.findAll();
 	}
-	
+
 	public Page<Task> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		UserSS userSS = userService.authenticated();
-		if(userSS == null) {
+		if (userSS == null) {
 			throw new AuthorizationException("Usuário não autenticado");
 		}
-		
+
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		
+
 		User user = userService.find(userSS.getId());
-		
+
 		return taskRepository.findByUser(user, pageRequest);
 	}
-	
+
 	public Task findById(long id) {
 		return taskRepository.getOne(id);
 	}
-	
-	public Task create(TaskDTO taskDTO) {
-        return taskRepository.save(taskDTO.getTask());
-    }
-	
-	public Task update(TaskDTO taskDTO) throws Exception {
-        return taskRepository.save(taskDTO.getTask());
-    }
-	
-	public void remove(Long id) throws Exception{
+
+	public Task save(TaskDTO taskDTO) {
+		Task task = new Task(null, taskDTO.getName(), taskDTO.getDescription(), null, null);
+		return taskRepository.save(task);
+	}
+
+	public void remove(Long id) throws Exception {
 		taskRepository.deleteById(id);
 	}
 }
