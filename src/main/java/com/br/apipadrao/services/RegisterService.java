@@ -36,47 +36,76 @@ public class RegisterService {
 	@Transactional
 	public Register save(RegisterDTO registerDTO) {
 		Random random = new Random();
-		int index = 0;
-		int userListIndex = 0;
+		int indexUserTask = 0;
+		int indexUser = 0;
 		Task task = null;
 		List<Task> tasks = registerDTO.getTasks();
 		List<User> users = registerDTO.getUsers();
+
 		Register register = new Register(registerDTO.getName(), registerDTO.getInitialDate(),
 				registerDTO.getFinalDate(), registerDTO.getReward());
 		register = registerRepository.save(register);
+
 		while (true) {
 			if (tasks.isEmpty()) {
 				break;
 			}
-			for (userListIndex = 0; userListIndex < users.size(); userListIndex++) {
-				User u = userRepository.findByEmail(users.get(userListIndex).getEmail());
+			int option = random.nextInt(2);
+			if (option == 0) {
+				for (indexUser = 0; indexUser < users.size(); indexUser++) {
+					User user = userRepository.findByEmail(users.get(indexUser).getEmail());
+					while (true) {
+						try {
+							if (tasks.isEmpty() && tasks.size() == 0) {
+								break;
+							} else {
+								indexUserTask = random.nextInt(tasks.size());
+								task = tasks.get(indexUserTask);
+								if (task != null) {
+									break;
+								}
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					if (task != null) {
+						task.setUser(user);
+						task.setRegister(register);
+						if (task.getDescription().isEmpty()) {
+							task.setDescription("Sem descrição");
+						}
+						taskRepository.save(task);
+						task = null;
+						tasks.remove(indexUserTask);
+					}
+				}
+			} else if (option == 1) {
+				indexUser = random.nextInt(users.size());
+				User user = userRepository.findByEmail(users.get(indexUser).getEmail());
 				while (true) {
 					try {
-						if (tasks.isEmpty() && tasks.size() == 0) {
+						indexUserTask = random.nextInt(tasks.size());
+						task = tasks.get(indexUserTask);
+						if (task != null) {
 							break;
-						} else {
-							index = random.nextInt(tasks.size());
-							task = tasks.get(index);
-							if (task != null) {
-								break;
-							}
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 				if (task != null) {
-					task.setUser(u);
+					task.setUser(user);
 					task.setRegister(register);
 					if (task.getDescription().isEmpty()) {
 						task.setDescription("Sem descrição");
 					}
 					taskRepository.save(task);
 					task = null;
-					tasks.remove(index);
+					tasks.remove(indexUserTask);
 				}
 			}
-			userListIndex = 0;
+			indexUser = 0;
 		}
 		return register;
 	}
