@@ -42,7 +42,7 @@ public class TaskResources {
 
 	@GetMapping("/v1/list/")
 	public ResponseEntity<Page<Task>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
+			@RequestParam(value = "linesPerPage", defaultValue = "5") Integer linesPerPage,
 			@RequestParam(value = "orderBy", defaultValue = "register.initialDate") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 
