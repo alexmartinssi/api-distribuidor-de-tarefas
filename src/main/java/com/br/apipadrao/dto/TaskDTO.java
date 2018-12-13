@@ -19,6 +19,8 @@ public class TaskDTO implements Serializable {
 	private String name;
 	@Column(nullable = true, length = 100)
 	private String description;
+	@Column(nullable = true, length = 20)
+	private String status;
 	private User user;
 	private Register register;
 }

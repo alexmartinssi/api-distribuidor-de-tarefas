@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.apipadrao.domain.User;
@@ -49,10 +47,13 @@ public class UserResources {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public ResponseEntity<User> find(@RequestParam(value = "value") String email) {
-		User obj = userService.findByEmail(email);
-		return ResponseEntity.ok().body(obj);
+	@GetMapping("/v1/user/find-by-email/{email}")
+	public ResponseEntity<User> findByEmail(@PathVariable("email") String email) {
+		User user = userService.findByEmail(email);
+		if (user == null) {
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 	@PostMapping("/v1/create/")

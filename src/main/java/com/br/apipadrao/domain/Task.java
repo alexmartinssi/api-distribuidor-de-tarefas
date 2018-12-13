@@ -14,10 +14,12 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "api_task") //
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -32,6 +34,8 @@ public class Task implements Serializable {
 	private String name;
 	@Column(nullable = true, length = 100)
 	private String description;
+	@Column(nullable = true, length = 20)
+	private String status;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -39,6 +43,4 @@ public class Task implements Serializable {
 	@JoinColumn(name = "register_id")
 	private Register register;
 
-	public Task() {
-	}
 }

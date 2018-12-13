@@ -46,7 +46,8 @@ public class TaskService {
 	}
 
 	public Task save(TaskDTO taskDTO) {
-		Task task = new Task(null, taskDTO.getName(), taskDTO.getDescription(), null, null);
+		Task task = new Task(null, taskDTO.getName(), taskDTO.getDescription(), taskDTO.getStatus(), taskDTO.getUser(),
+				taskDTO.getRegister());
 		return taskRepository.save(task);
 	}
 

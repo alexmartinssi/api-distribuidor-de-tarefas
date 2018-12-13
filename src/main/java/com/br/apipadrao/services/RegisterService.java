@@ -36,7 +36,7 @@ public class RegisterService {
 	@Transactional
 	public Register save(RegisterDTO registerDTO) {
 		Random random = new Random();
-		int indexUserTask = 0;
+		int indexTask = 0;
 		int indexUser = 0;
 		Task task = null;
 		List<Task> tasks = registerDTO.getTasks();
@@ -50,51 +50,26 @@ public class RegisterService {
 			if (tasks.isEmpty()) {
 				break;
 			}
-			int option = random.nextInt(2);
-			if (option == 0) {
-				for (indexUser = 0; indexUser < users.size(); indexUser++) {
-					User user = userRepository.findByEmail(users.get(indexUser).getEmail());
-					while (true) {
-						try {
-							if (tasks.isEmpty() && tasks.size() == 0) {
-								break;
-							} else {
-								indexUserTask = random.nextInt(tasks.size());
-								task = tasks.get(indexUserTask);
-								if (task != null) {
-									break;
-								}
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					if (task != null) {
-						task.setUser(user);
-						task.setRegister(register);
-						if (task.getDescription().isEmpty()) {
-							task.setDescription("Sem descrição");
-						}
-						taskRepository.save(task);
-						task = null;
-						tasks.remove(indexUserTask);
-					}
-				}
-			} else if (option == 1) {
-				indexUser = random.nextInt(users.size());
+
+			for (indexUser = 0; indexUser < users.size(); indexUser++) {
 				User user = userRepository.findByEmail(users.get(indexUser).getEmail());
 				while (true) {
 					try {
-						indexUserTask = random.nextInt(tasks.size());
-						task = tasks.get(indexUserTask);
-						if (task != null) {
+						if (tasks.isEmpty() && tasks.size() == 0) {
 							break;
+						} else {
+							indexTask = random.nextInt(tasks.size());
+							task = tasks.get(indexTask);
+							if (task != null) {
+								break;
+							}
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 				if (task != null) {
+					task.setStatus("Em Andamento");
 					task.setUser(user);
 					task.setRegister(register);
 					if (task.getDescription().isEmpty()) {
@@ -102,7 +77,7 @@ public class RegisterService {
 					}
 					taskRepository.save(task);
 					task = null;
-					tasks.remove(indexUserTask);
+					tasks.remove(indexTask);
 				}
 			}
 			indexUser = 0;

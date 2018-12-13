@@ -69,6 +69,19 @@ public class TaskResources {
 		return new ResponseEntity<Task>(task, HttpStatus.CREATED);
 	}
 
+	@PutMapping("/v1/change-status/")
+	public ResponseEntity<?> changeStatus(@Valid @RequestBody TaskDTO taskDTO) {
+		try {
+			Task task = taskService.save(taskDTO);
+			if (task == null) {
+				return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<Task>(task, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Task>(HttpStatus.CONFLICT);
+		}
+	}
+
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/v1/update/")
 	public ResponseEntity<?> update(@Valid @RequestBody TaskDTO taskDTO) {
