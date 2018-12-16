@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.br.apipadrao.domain.Task;
 import com.br.apipadrao.domain.User;
@@ -45,9 +46,28 @@ public class TaskService {
 		return taskRepository.getOne(id);
 	}
 
+	@Transactional
 	public Task save(TaskDTO taskDTO) {
 		Task task = new Task(null, taskDTO.getName(), taskDTO.getDescription(), taskDTO.getStatus(), taskDTO.getUser(),
 				taskDTO.getRegister());
+		return taskRepository.save(task);
+	}
+
+	public Task update(TaskDTO taskDTO) throws Exception {
+		Task task = taskRepository.getOne(Long.valueOf(taskDTO.getId()));
+		task.setName(task.getName());
+		task.setDescription(taskDTO.getDescription());
+		task.setStatus(taskDTO.getStatus());
+		task.setUser(taskDTO.getUser());
+		task.setRegister(taskDTO.getRegister());
+
+		return taskRepository.save(task);
+	}
+
+	public Task changeStatus(TaskDTO taskDTO) throws Exception {
+		Task task = taskRepository.getOne(Long.valueOf(taskDTO.getId()));
+		task.setStatus(taskDTO.getStatus());
+
 		return taskRepository.save(task);
 	}
 

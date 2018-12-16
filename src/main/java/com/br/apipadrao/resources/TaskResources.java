@@ -72,7 +72,7 @@ public class TaskResources {
 	@PutMapping("/v1/change-status/")
 	public ResponseEntity<?> changeStatus(@Valid @RequestBody TaskDTO taskDTO) {
 		try {
-			Task task = taskService.save(taskDTO);
+			Task task = taskService.changeStatus(taskDTO);
 			if (task == null) {
 				return new ResponseEntity<Task>(HttpStatus.NOT_FOUND);
 			}

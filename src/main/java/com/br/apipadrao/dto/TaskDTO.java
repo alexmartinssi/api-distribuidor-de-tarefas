@@ -14,6 +14,7 @@ import lombok.Data;
 public class TaskDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private String id;
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Column(nullable = false, length = 100)
 	private String name;
